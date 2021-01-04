@@ -22,7 +22,7 @@ module.exports ={
          * first we check if the inputs are valid (validateLoginInput returns valid and error)
         */
         async login(_,{username, password}){
-            const{errors, valid} = validateLoginInput(username, password);
+            const{valid, errors} = validateLoginInput(username, password);
 
             if(!valid){
                 throw new UserInputError('Errors', {errors});
@@ -38,6 +38,7 @@ module.exports ={
             //with the bcryptjs we check if the password match
             const match = await bcrypt.compare(password, user.password);
             if(!match){
+                errors.general = 'Wrong credentials';
                 throw new UserInputError('Wrong credentials', {errors});
             }
 
